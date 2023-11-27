@@ -1,0 +1,11 @@
+version: '3'
+services:
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    image: mysql_chat
+    container_name: mysql-chat
+    ports:
+      - "8080:8080"

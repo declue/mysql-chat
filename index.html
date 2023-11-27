@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat App</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(function() {
+            // 채팅 메시지 가져오기
+            function fetchMessages() {
+                $.get('/chat/', function(messages) {
+                    $('#messages').empty();
+                    messages.forEach(function(message) {
+                        $('#messages').append('<p><strong>' + message.user_id + ':</strong> ' + message.message + '</p>');
+                    });
+                });
+            }
+
+            fetchMessages();
+            setInterval(fetchMessages, 5000); // 5초마다 메시지 갱신
+	    
+
+
+            // 메시지 보내기
+            $('#send').click(function() {
+                var message = $('#message').val();
+		$.ajax({
+                	url: '/chat/',
+        		type: 'POST',
+        		contentType: 'application/json',
+        		data: JSON.stringify({ message: message }),
+        		success: function() {
+            		$('#message').val('');
+            			fetchMessages();
+        		}
+    		});
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>Chat App</h1>
+    <div id="messages"></div>
+    <input type="text" id="message">
+    <button id="send">Send</button>
+</body>
+</html>
+
